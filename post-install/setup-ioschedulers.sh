@@ -5,6 +5,9 @@ set -euo pipefail
 # I/O SCHEDULERS — atribuição automática por tipo de dispositivo
 # Defaults voltados para workloads desktop/interativos.
 # =============================================================================
+
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/common.sh"
+
 IOSCHED_FILE="/etc/udev/rules.d/60-ioschedulers.rules"
 
 read -r -d '' IOSCHED_RULES <<'EOF' || true
@@ -27,15 +30,6 @@ ACTION=="add|change", KERNEL=="sd*", SUBSYSTEM=="block", ATTR{queue/rotational}=
 ACTION=="add|change", KERNEL=="sd*", SUBSYSTEM=="block", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
 EOF
 # =============================================================================
-
-CYAN='\033[0;36m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RESET='\033[0m'
-
-info()    { echo -e "${CYAN}==> $*${RESET}"; }
-ok()      { echo -e "${GREEN}    ok: $*${RESET}"; }
-skipped() { echo -e "${YELLOW}    --: $*${RESET}"; }
 
 info "Configurando scheduler de I/O (kyber/bfq)..."
 
