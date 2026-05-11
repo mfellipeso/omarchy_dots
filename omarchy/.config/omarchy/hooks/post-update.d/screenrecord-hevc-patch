@@ -6,4 +6,9 @@
 
 SCRIPT="$HOME/.local/share/omarchy/bin/omarchy-capture-screenrecording"
 [[ -f $SCRIPT ]] || exit 0
-grep -q -- "-k auto" "$SCRIPT" && sed -i 's/-k auto/-k hevc/' "$SCRIPT"
+
+if grep -q -- "-k auto" "$SCRIPT"; then
+  sed -i 's/-k auto/-k hevc/' "$SCRIPT"
+fi
+
+exit 0
