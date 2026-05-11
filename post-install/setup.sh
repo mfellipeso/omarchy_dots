@@ -10,7 +10,9 @@ SETUP_SCRIPTS=(
   # 1) Sistema base
   setup-locale.sh
   setup-networkmanager.sh
+  setup-dns.sh
   setup-ioschedulers.sh
+  setup-sysctl.sh
 
   # 2) Containers / VMs
   setup-docker.sh
