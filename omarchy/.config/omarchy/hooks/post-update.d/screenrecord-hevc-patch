@@ -1,0 +1,9 @@
+#!/bin/bash
+# Re-apply HEVC patch to gpu-screen-recorder invocation.
+# Why: VAAPI H.264 encoder on AMD Polaris (RX 580 / VCE 3.4) produces
+# corrupted bitstreams. HEVC encoder on the same chip works correctly.
+# omarchy update overwrites the script, so this hook patches it back.
+
+SCRIPT="$HOME/.local/share/omarchy/bin/omarchy-capture-screenrecording"
+[[ -f $SCRIPT ]] || exit 0
+grep -q -- "-k auto" "$SCRIPT" && sed -i 's/-k auto/-k hevc/' "$SCRIPT"
