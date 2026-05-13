@@ -12,6 +12,8 @@ SETUP_SCRIPTS=(
   setup-networkmanager.sh
   setup-dns.sh
   setup-ioschedulers.sh
+  setup-luks-perf.sh
+  setup-trim.sh
   setup-sysctl.sh
 
   # 2) Containers / VMs
