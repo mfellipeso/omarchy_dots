@@ -15,6 +15,7 @@ SETUP_SCRIPTS=(
   setup-luks-perf.sh
   setup-trim.sh
   setup-sysctl.sh
+  setup-slice-priority.sh
 
   # 2) Containers / VMs
   setup-docker.sh

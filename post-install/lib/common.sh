@@ -81,26 +81,38 @@ btrfs_subvol_nocow() {
   info "btrfs detectado — verificando subvolume $path..."
   if sudo btrfs subvolume show "$path" &>/dev/null; then
     skipped "subvolume $path já existe"
-  else
-    [[ -n "$stop_svc" ]] && sudo systemctl stop "$stop_svc" 2>/dev/null || true
-    sudo mkdir -p "$(dirname "$path")"
-    if [[ -d "$path" ]]; then
-      sudo mv "$path" "${path}.bak"
+    if lsattr -d "$path" 2>/dev/null | grep -q 'C'; then
+      skipped "CoW já desativado em $path"
+    else
+      sudo chattr +C "$path"
+      ok "CoW desativado em $path (atenção: arquivos preexistentes mantêm CoW)"
     fi
-    sudo btrfs subvolume create "$path"
-    if [[ -d "${path}.bak" ]]; then
-      sudo mv "${path}.bak"/* "$path"/ 2>/dev/null || true
-      sudo rm -rf "${path}.bak"
-    fi
-    ok "subvolume $path criado"
+    return 0
   fi
 
-  if lsattr -d "$path" 2>/dev/null | grep -q 'C'; then
-    skipped "CoW já desativado em $path"
-  else
-    sudo chattr +C "$path"
-    ok "CoW desativado em $path"
+  [[ -n "$stop_svc" ]] && sudo systemctl stop "$stop_svc" 2>/dev/null || true
+  sudo mkdir -p "$(dirname "$path")"
+
+  local had_data=0
+  if [[ -d "$path" ]]; then
+    sudo mv "$path" "${path}.bak"
+    had_data=1
   fi
+
+  sudo btrfs subvolume create "$path"
+  # +C precisa ser aplicado no subvolume vazio para que os arquivos copiados
+  # depois nasçam já sem CoW (chattr +C em diretório não-vazio não converte
+  # os arquivos existentes).
+  sudo chattr +C "$path"
+
+  if (( had_data )); then
+    # cp --reflink=never força reescrita: arquivos novos herdam o +C do
+    # diretório-pai. mv no mesmo FS é só rename e preservaria CoW antigo.
+    sudo cp --reflink=never -a "${path}.bak"/. "$path"/
+    sudo rm -rf "${path}.bak"
+  fi
+
+  ok "subvolume $path criado com CoW desativado"
 }
 
 # need_cmd <cmd> [hint]
