@@ -20,6 +20,7 @@ SETUP_SCRIPTS=(
   # 2) Containers / VMs
   setup-docker.sh
   setup-virt.sh
+  setup-flatpak.sh
 )
 # =============================================================================
 
