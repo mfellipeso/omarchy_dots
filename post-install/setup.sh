@@ -16,6 +16,7 @@ SETUP_SCRIPTS=(
   setup-trim.sh
   setup-sysctl.sh
   setup-slice-priority.sh
+  setup-tlp.sh
 
   # 2) Containers / VMs
   setup-docker.sh
