@@ -55,7 +55,6 @@
     "signal": 7,
     "interval": 21600
   },
-
   "custom/mic": {
     "exec": "~/.config/waybar/scripts/mic-status.sh",
     "return-type": "json",
@@ -78,8 +77,8 @@
     "on-click-right": "alacritty"
   },
   "clock": {
-    "format": "{:L%A %d %B - %H:%M}",
-    "format-alt": "{:L%A W%V %Y - %H:%M}",
+    "format": "{:L%A %H:%M}",
+    "format-alt": "{:L%d %B W%V %Y}",
     "tooltip": false,
     "on-click-right": "omarchy-launch-floating-terminal-with-presentation omarchy-tz-select"
   },
@@ -101,7 +100,7 @@
     "tooltip-format-disconnected": "Disconnected",
     "interval": 3,
     "spacing": 1,
-    "on-click": "nm-applet --indicator"
+    "on-click": "omarchy-launch-wifi"
   },
   "battery": {
     "format": "{capacity}% {icon}",
@@ -117,6 +116,7 @@
     "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
     "interval": 5,
     "on-click": "omarchy-menu power",
+    "on-click-right": "notify-send -u low \"$(omarchy-battery-status)\"",
     "states": {
       "warning": 20,
       "critical": 10
@@ -161,7 +161,7 @@
     "on-scroll-right": ""
   },
   "custom/screenrecording-indicator": {
-    "on-click": "omarchy-cmd-screenrecord",
+    "on-click": "omarchy-capture-screenrecording",
     "exec": "$OMARCHY_PATH/default/waybar/indicators/screen-recording.sh",
     "signal": 8,
     "return-type": "json"
