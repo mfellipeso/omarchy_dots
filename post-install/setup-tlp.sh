@@ -18,14 +18,17 @@ STOP_CHARGE_THRESH_BAT0=85
 # === CPU ===
 # AC: governor performance pina os cores no boost.
 # BAT: amd_pstate active só aceita powersave/performance; EPP controla agressividade.
+# EPP=balance_power mantém responsividade mas evita subir frequência sem demanda.
+# Boost desligado na bateria: maior fonte de drain em uso desktop.
 CPU_SCALING_GOVERNOR_ON_AC=performance
 CPU_SCALING_GOVERNOR_ON_BAT=powersave
 CPU_ENERGY_PERF_POLICY_ON_AC=performance
-CPU_ENERGY_PERF_POLICY_ON_BAT=balance_performance
+CPU_ENERGY_PERF_POLICY_ON_BAT=balance_power
 CPU_BOOST_ON_AC=1
-CPU_BOOST_ON_BAT=1
+CPU_BOOST_ON_BAT=0
 
 # === Platform profile (ACPI) ===
+# balanced na bateria: firmware reduz TDP/fan sem cap agressivo de low-power.
 PLATFORM_PROFILE_ON_AC=performance
 PLATFORM_PROFILE_ON_BAT=balanced
 
